@@ -61,21 +61,28 @@ public class Subscriptions extends Controller {
 
                                 Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
                                 User creator = event.getCreator();
-                                Payload payload = event.getPayload();
-                                Company company = payload.getCompany();
-                                Order order = payload.getOrder();
+                                Company company = event.getPayload().getCompany();
+                                Order order = event.getPayload().getOrder();
                                 String edition = order.getEditionCode();
                                 Item[] items = order.getItem();
 
-                                if (User.find().ref(creator.uuid) == null) {
-                                    creator.save();
+
+                                if (User.find().byId(creator.uuid) != null) {
+                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                            "<result>\n" +
+                                            "    <success>false</success>\n" +
+                                            "    <errorCode>USER_ALREADY_EXISTS</errorCode>\n" +
+                                            "    <message>The user " + creator.firstName + " " + creator.lastName + " is already registered</message>\n" +
+                                            "</result>";
+
+                                    return badRequest(errorResponse).as("XML");
                                 }
 
-                                if (Company.find().ref(company.uuid) == null) {
+                                if (Company.find().byId(company.uuid) == null) {
                                     company.save();
                                 }
 
-                                String accountId = Subscription.create(company, creator, edition);
+                                String accountId = Subscription.create(creator, company, edition);
 
                                 for (int i = 0; i < items.length; i++) {
                                     Subscription.addItem(accountId, new SubscriptionItem(items[i].getUnit(), items[i].getQuantity()));
@@ -214,7 +221,7 @@ public class Subscriptions extends Controller {
                                 Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
                                 Account account = event.getPayload().getAccount();
 
-                                Subscription subscription = Subscription.find().ref(account.getAccountIdentifier());
+                                Subscription subscription = Subscription.find().byId(account.getAccountIdentifier());
 
                                 if (subscription == null) {
                                     String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -279,7 +286,7 @@ public class Subscriptions extends Controller {
                                 Account account = event.getPayload().getAccount();
                                 Notice notice = event.getPayload().getNotice();
 
-                                Subscription subscription = Subscription.find().ref(account.getAccountIdentifier());
+                                Subscription subscription = Subscription.find().byId(account.getAccountIdentifier());
 
                                 if (subscription == null) {
                                     String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +

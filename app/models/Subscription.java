@@ -22,11 +22,10 @@ public class Subscription extends Model {
 
     @NotNull
     @ManyToOne (cascade = CascadeType.ALL)
-    public Company company;
-
-    @NotNull
-    @ManyToOne (cascade = CascadeType.ALL)
     public User creator;
+
+    @ManyToOne (cascade = CascadeType.ALL)
+    public Company company;
 
     @ManyToMany (cascade = CascadeType.ALL)
     List<User> users;
@@ -41,10 +40,10 @@ public class Subscription extends Model {
     public String status;
 
 
-    public Subscription(Company company, User creator, String edition) {
+    public Subscription(User creator, Company company, String edition) {
         this.id = UUID.randomUUID().toString();
-        this.company = company;
         this.creator = creator;
+        this.company = company;
         this.edition = edition;
         this.status = Status.FREE_TRIAL.toString().toUpperCase();
     }
@@ -54,8 +53,8 @@ public class Subscription extends Model {
         return new Finder<String, Subscription>(String.class, Subscription.class);
     }
 
-    public static String create(Company company, User creator, String edition) {
-        Subscription subscription = new Subscription(company, creator, edition);
+    public static String create(User creator, Company company, String edition) {
+        Subscription subscription = new Subscription(creator, company, edition);
         subscription.save();
         return subscription.id;
     }

@@ -15,8 +15,8 @@ create table companies (
 
 create table subscriptions (
   id                        varchar(255) not null,
-  company_uuid              varchar(255) not null,
   creator_uuid              varchar(255) not null,
+  company_uuid              varchar(255),
   edition                   varchar(255) not null,
   status                    varchar(255) not null,
   constraint pk_subscriptions primary key (id))
@@ -63,10 +63,10 @@ create sequence users_seq;
 
 create sequence user_attributes_seq;
 
-alter table subscriptions add constraint fk_subscriptions_company_1 foreign key (company_uuid) references companies (uuid) on delete restrict on update restrict;
-create index ix_subscriptions_company_1 on subscriptions (company_uuid);
-alter table subscriptions add constraint fk_subscriptions_creator_2 foreign key (creator_uuid) references users (uuid) on delete restrict on update restrict;
-create index ix_subscriptions_creator_2 on subscriptions (creator_uuid);
+alter table subscriptions add constraint fk_subscriptions_creator_1 foreign key (creator_uuid) references users (uuid) on delete restrict on update restrict;
+create index ix_subscriptions_creator_1 on subscriptions (creator_uuid);
+alter table subscriptions add constraint fk_subscriptions_company_2 foreign key (company_uuid) references companies (uuid) on delete restrict on update restrict;
+create index ix_subscriptions_company_2 on subscriptions (company_uuid);
 alter table subscription_items add constraint fk_subscription_items_subscrip_3 foreign key (subscription_id) references subscriptions (id) on delete restrict on update restrict;
 create index ix_subscription_items_subscrip_3 on subscription_items (subscription_id);
 alter table user_attributes add constraint fk_user_attributes_user_4 foreign key (user_uuid) references users (uuid) on delete restrict on update restrict;
