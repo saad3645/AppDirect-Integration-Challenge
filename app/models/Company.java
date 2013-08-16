@@ -1,7 +1,5 @@
 package models;
 
-import com.avaje.ebean.validation.NotEmpty;
-import com.avaje.ebean.validation.NotNull;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
@@ -26,12 +24,8 @@ public class Company extends Model {
     @Id
     public String uuid;
 
-    @NotNull
     public String email;
-
-    @NotNull
     public String name;
-
     public String phoneNumber;
     public String website;
     public String country;

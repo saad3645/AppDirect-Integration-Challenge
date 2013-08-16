@@ -5,6 +5,9 @@ import models.Subscription;
 import models.SubscriptionItem;
 import models.User;
 import models.xml.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import play.libs.F.Function;
 import play.libs.Json;
 import play.libs.WS;
@@ -15,6 +18,7 @@ import play.mvc.Result;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import java.io.StringReader;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
@@ -54,10 +58,13 @@ public class Subscriptions extends Controller {
                             @Override
                             public Result apply(WS.Response response) throws Throwable {
 
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
                                 JAXBContext context = JAXBContext.newInstance(Event.class);
                                 Unmarshaller unmarshaller = context.createUnmarshaller();
 
-                                Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
+                                Event event = (Event) unmarshaller.unmarshal(reader);
                                 User creator = event.getCreator();
                                 Company company = event.getPayload().getCompany();
                                 Order order = event.getPayload().getOrder();
@@ -119,10 +126,13 @@ public class Subscriptions extends Controller {
                             @Override
                             public Result apply(WS.Response response) throws Throwable {
 
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
                                 JAXBContext context = JAXBContext.newInstance(Event.class);
                                 Unmarshaller unmarshaller = context.createUnmarshaller();
 
-                                Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
+                                Event event = (Event) unmarshaller.unmarshal(reader);
                                 User creator = event.getCreator();
                                 Payload payload = event.getPayload();
                                 Account account = payload.getAccount();
@@ -199,10 +209,13 @@ public class Subscriptions extends Controller {
                             @Override
                             public Result apply(WS.Response response) throws Throwable {
 
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
                                 JAXBContext context = JAXBContext.newInstance(Event.class);
                                 Unmarshaller unmarshaller = context.createUnmarshaller();
 
-                                Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
+                                Event event = (Event) unmarshaller.unmarshal(reader);
                                 Account account = event.getPayload().getAccount();
 
                                 Subscription subscription = Subscription.find().byId(account.getAccountIdentifier());
@@ -263,10 +276,13 @@ public class Subscriptions extends Controller {
                             @Override
                             public Result apply(WS.Response response) throws Throwable {
 
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
                                 JAXBContext context = JAXBContext.newInstance(Event.class);
                                 Unmarshaller unmarshaller = context.createUnmarshaller();
 
-                                Event event = (Event) unmarshaller.unmarshal(response.getBodyAsStream());
+                                Event event = (Event) unmarshaller.unmarshal(reader);
                                 Account account = event.getPayload().getAccount();
                                 Notice notice = event.getPayload().getNotice();
 

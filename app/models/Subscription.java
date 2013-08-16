@@ -1,6 +1,5 @@
 package models;
 
-import com.avaje.ebean.validation.NotNull;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -20,7 +19,6 @@ public class Subscription extends Model {
     @Id
     public String id;
 
-    @NotNull
     @OneToOne (cascade = CascadeType.ALL)
     public User creator;
 
@@ -30,13 +28,11 @@ public class Subscription extends Model {
     @ManyToMany (cascade = CascadeType.ALL)
     List<User> users;
 
-    @NotNull
     public String edition;
 
     @OneToMany (cascade = CascadeType.ALL)
     public List<SubscriptionItem> items;
 
-    @NotNull
     public String status;
 
 

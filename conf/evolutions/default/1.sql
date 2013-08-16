@@ -5,8 +5,8 @@
 
 create table companies (
   uuid                      varchar(255) not null,
-  email                     varchar(255) not null,
-  name                      varchar(255) not null,
+  email                     varchar(255),
+  name                      varchar(255),
   phone_number              varchar(255),
   website                   varchar(255),
   country                   varchar(255),
@@ -15,10 +15,10 @@ create table companies (
 
 create table subscriptions (
   id                        varchar(255) not null,
-  creator_uuid              varchar(255) not null,
+  creator_uuid              varchar(255),
   company_uuid              varchar(255),
-  edition                   varchar(255) not null,
-  status                    varchar(255) not null,
+  edition                   varchar(255),
+  status                    varchar(255),
   constraint pk_subscriptions primary key (id))
 ;
 
@@ -32,10 +32,10 @@ create table subscription_items (
 
 create table users (
   uuid                      varchar(255) not null,
-  email                     varchar(255) not null,
-  first_name                varchar(255) not null,
-  last_name                 varchar(255) not null,
-  open_id                   varchar(255) not null,
+  email                     varchar(255),
+  first_name                varchar(255),
+  last_name                 varchar(255),
+  open_id                   varchar(255),
   constraint pk_users primary key (uuid))
 ;
 
