@@ -25,9 +25,6 @@ public class Subscription extends Model {
     @OneToOne (cascade = CascadeType.ALL)
     public Company company;
 
-    @ManyToMany (cascade = CascadeType.ALL)
-    List<User> users;
-
     public String edition;
 
     @OneToMany (cascade = CascadeType.ALL)

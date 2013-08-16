@@ -1,12 +1,10 @@
 package models;
 
-import com.avaje.ebean.validation.NotEmpty;
-import com.avaje.ebean.validation.NotNull;
+
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -17,10 +15,7 @@ public class SubscriptionItem extends Model {
     @Id
     public Long id;
 
-    @NotNull @NotEmpty
     public String unit;
-
-    @NotNull
     public int quantity;
 
 

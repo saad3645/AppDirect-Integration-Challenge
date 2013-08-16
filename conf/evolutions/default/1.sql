@@ -25,8 +25,8 @@ create table subscriptions (
 create table subscription_items (
   id                        bigint not null,
   subscription_id           varchar(255) not null,
-  unit                      varchar(255) not null,
-  quantity                  integer not null,
+  unit                      varchar(255),
+  quantity                  integer,
   constraint pk_subscription_items primary key (id))
 ;
 
@@ -47,12 +47,6 @@ create table user_attributes (
   constraint pk_user_attributes primary key (id))
 ;
 
-
-create table subscriptions_users (
-  subscriptions_id               varchar(255) not null,
-  users_uuid                     varchar(255) not null,
-  constraint pk_subscriptions_users primary key (subscriptions_id, users_uuid))
-;
 create sequence companies_seq;
 
 create sequence subscriptions_seq;
@@ -74,10 +68,6 @@ create index ix_user_attributes_user_4 on user_attributes (user_uuid);
 
 
 
-alter table subscriptions_users add constraint fk_subscriptions_users_subscr_01 foreign key (subscriptions_id) references subscriptions (id) on delete restrict on update restrict;
-
-alter table subscriptions_users add constraint fk_subscriptions_users_users_02 foreign key (users_uuid) references users (uuid) on delete restrict on update restrict;
-
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
@@ -85,8 +75,6 @@ SET REFERENTIAL_INTEGRITY FALSE;
 drop table if exists companies;
 
 drop table if exists subscriptions;
-
-drop table if exists subscriptions_users;
 
 drop table if exists subscription_items;
 
