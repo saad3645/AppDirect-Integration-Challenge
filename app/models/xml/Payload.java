@@ -11,9 +11,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Payload {
 
+    private Account account;
     private Company company;
     private Order order;
+    private Notice notice;
 
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public Company getCompany() {
         return company;
@@ -29,5 +39,13 @@ public class Payload {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Notice getNotice() {
+        return notice;
+    }
+
+    public void setNotice(Notice notice) {
+        this.notice = notice;
     }
 }

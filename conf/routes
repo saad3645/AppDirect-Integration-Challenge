@@ -3,16 +3,21 @@
 # ~~~~
 
 # Home page
-GET     /                               controllers.Application.index()
+GET     /                                   controllers.Application.index()
 
 
 # Event Notification Urls
-GET     /appdirect/subscription/order     controllers.Subscriptions.order()
-GET     /appdirect/subscription/change    controllers.Subscriptions.change()
-GET     /appdirect/subscription/cancel    controllers.Subscriptions.cancel()
-GET     /appdirect/subscription/notice    controllers.Subscriptions.notice()
-GET     /appdirect/user/assign/:eventUrl            controllers.Users.assign(eventUrl: String)
-GET     /appdirect/user/unassign/:eventUrl          controllers.Users.unassign(eventUrl: String)
+GET     /appdirect/subscription/create      controllers.Subscriptions.create()
+GET     /appdirect/subscription/change      controllers.Subscriptions.change()
+GET     /appdirect/subscription/cancel      controllers.Subscriptions.cancel()
+GET     /appdirect/subscription/notice      controllers.Subscriptions.notice()
+GET     /appdirect/user/assign              controllers.Users.assign()
+GET     /appdirect/user/unassign            controllers.Users.unassign()
+
+
+GET     /api/users/all                      controllers.Users.all()
+GET     /api/subscriptions/all              controllers.Subscriptions.all()
+
 
 
 # Map static resources from the /public folder to the /assets URL path

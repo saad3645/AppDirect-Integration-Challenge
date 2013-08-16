@@ -14,7 +14,7 @@ create table companies (
 ;
 
 create table subscriptions (
-  id                        varchar(40) not null,
+  id                        varchar(255) not null,
   company_uuid              varchar(255) not null,
   creator_uuid              varchar(255) not null,
   edition                   varchar(255) not null,
@@ -24,7 +24,7 @@ create table subscriptions (
 
 create table subscription_items (
   id                        bigint not null,
-  subscription_id           varchar(40) not null,
+  subscription_id           varchar(255) not null,
   unit                      varchar(255) not null,
   quantity                  integer not null,
   constraint pk_subscription_items primary key (id))
@@ -49,11 +49,13 @@ create table user_attributes (
 
 
 create table subscriptions_users (
-  subscriptions_id               varchar(40) not null,
+  subscriptions_id               varchar(255) not null,
   users_uuid                     varchar(255) not null,
   constraint pk_subscriptions_users primary key (subscriptions_id, users_uuid))
 ;
 create sequence companies_seq;
+
+create sequence subscriptions_seq;
 
 create sequence subscription_items_seq;
 
@@ -95,6 +97,8 @@ drop table if exists user_attributes;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists companies_seq;
+
+drop sequence if exists subscriptions_seq;
 
 drop sequence if exists subscription_items_seq;
 

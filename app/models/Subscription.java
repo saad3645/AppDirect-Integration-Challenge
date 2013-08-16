@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Subscription extends Model {
 
     @Id
-    public UUID id;
+    public String id;
 
     @NotNull
     @ManyToOne (cascade = CascadeType.ALL)
@@ -42,6 +42,7 @@ public class Subscription extends Model {
 
 
     public Subscription(Company company, User creator, String edition) {
+        this.id = UUID.randomUUID().toString();
         this.company = company;
         this.creator = creator;
         this.edition = edition;
@@ -49,21 +50,34 @@ public class Subscription extends Model {
     }
 
 
-    public static Finder<UUID, Subscription> find() {
-        return new Finder<UUID, Subscription>(UUID.class, Subscription.class);
+    public static Finder<String, Subscription> find() {
+        return new Finder<String, Subscription>(String.class, Subscription.class);
     }
 
-    public static UUID create(Company company, User creator, String edition) {
+    public static String create(Company company, User creator, String edition) {
         Subscription subscription = new Subscription(company, creator, edition);
         subscription.save();
         return subscription.id;
     }
 
-    public static void addItem(UUID id, SubscriptionItem item) {
+    public static void addItem(String id, SubscriptionItem item) {
         Subscription subscription = Subscription.find().ref(id);
         subscription.items.add(item);
         subscription.update();
     }
+
+    public static void changeEdition(String id, String edition) {
+        Subscription subscription = Subscription.find().ref(id);
+        subscription.edition = edition;
+        subscription.update();
+    }
+
+    public static void changeStatus(String id, String status) {
+        Subscription subscription = Subscription.find().ref(id);
+        subscription.status = status.toUpperCase();
+        subscription.update();
+    }
+
 
     public enum Status {FREE_TRIAL, ACTIVE, FREE_TRIAL_EXPIRED, SUSPENDED, CANCELLED}
 }
