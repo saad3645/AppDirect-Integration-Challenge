@@ -12,14 +12,12 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 /**
@@ -74,7 +72,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The user " + creator.firstName + " " + creator.lastName + " is already registered</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("text/xml");
+                                    return ok(errorResponse).as("text/xml");
                                 }
 
                                 if (Company.find().byId(company.uuid) == null) {
@@ -143,7 +141,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("text/xml");
+                                    return ok(errorResponse).as("text/xml");
                                 }
 
                                 if (User.find().byId(creator.uuid) == null) {
@@ -154,7 +152,7 @@ public class Subscriptions extends Controller {
                                             "    <message>User " + creator.firstName + " " + creator.lastName + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("text/xml");
+                                    return ok(errorResponse).as("text/xml");
                                 }
 
                                 Order order = payload.getOrder();
@@ -221,7 +219,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("text/xml");
+                                    return ok(errorResponse).as("text/xml");
                                 }
 
 
@@ -286,7 +284,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("text/xml");
+                                    return ok(errorResponse).as("text/xml");
                                 }
 
 
