@@ -74,7 +74,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The user " + creator.firstName + " " + creator.lastName + " is already registered</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("XML");
+                                    return badRequest(errorResponse).as("text/xml");
                                 }
 
                                 if (Company.find().byId(company.uuid) == null) {
@@ -89,7 +89,7 @@ public class Subscriptions extends Controller {
                                         "    <message>Account successfully created</message>\n" +
                                         "    <accountIdentifier>" + accountId + "</accountIdentifier>\n" +
                                         "</result>";
-                                return ok(responseStr).as("XML");
+                                return ok(responseStr).as("text/xml");
                             }
                         }
                 )
@@ -143,7 +143,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("XML");
+                                    return badRequest(errorResponse).as("text/xml");
                                 }
 
                                 if (User.find().byId(creator.uuid) == null) {
@@ -154,7 +154,7 @@ public class Subscriptions extends Controller {
                                             "    <message>User " + creator.firstName + " " + creator.lastName + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("XML");
+                                    return badRequest(errorResponse).as("text/xml");
                                 }
 
                                 Order order = payload.getOrder();
@@ -170,7 +170,7 @@ public class Subscriptions extends Controller {
                                         "    <message>Account successfully changed</message>\n" +
                                         "    <accountIdentifier>" + subscription.id + "</accountIdentifier>\n" +
                                         "</result>";
-                                return ok(successResponse).as("XML");
+                                return ok(successResponse).as("text/xml");
                             }
                         }
                 )
@@ -221,7 +221,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("XML");
+                                    return badRequest(errorResponse).as("text/xml");
                                 }
 
 
@@ -234,7 +234,7 @@ public class Subscriptions extends Controller {
                                         "    <message>Account successfully cancelled</message>\n" +
                                         "    <accountIdentifier>" + subscription.id + "</accountIdentifier>\n" +
                                         "</result>";
-                                return ok(successResponse).as("XML");
+                                return ok(successResponse).as("text/xml");
                             }
                         }
                 )
@@ -286,7 +286,7 @@ public class Subscriptions extends Controller {
                                             "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
                                             "</result>";
 
-                                    return badRequest(errorResponse).as("XML");
+                                    return badRequest(errorResponse).as("text/xml");
                                 }
 
 
@@ -299,7 +299,7 @@ public class Subscriptions extends Controller {
                                         "    <message>Account successfully cancelled</message>\n" +
                                         "    <accountIdentifier>" + subscription.id + "</accountIdentifier>\n" +
                                         "</result>";
-                                return ok(successResponse).as("XML");
+                                return ok(successResponse).as("text/xml");
                             }
                         }
                 )
