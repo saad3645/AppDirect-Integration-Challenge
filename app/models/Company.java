@@ -26,10 +26,10 @@ public class Company extends Model {
     @Id
     public String uuid;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String email;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String name;
 
     public String phoneNumber;

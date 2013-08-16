@@ -1,6 +1,7 @@
 package controllers;
 
 
+import models.Company;
 import models.User;
 import play.libs.Json;
 import play.mvc.BodyParser;
@@ -34,12 +35,21 @@ public class Users extends Controller {
     }
 
 
-    public static Result deleteAll() {
+    public static Result deleteAllUsers() {
         List<User> users = User.find().all();
         for (User u : users) {
             u.delete();
         }
 
         return ok("All users deleted");
+    }
+
+    public static Result deleteAllCompanies() {
+        List<Company> companies = Company.find().all();
+        for (Company c: companies) {
+            c.delete();
+        }
+
+        return ok("All companies deleted");
     }
 }

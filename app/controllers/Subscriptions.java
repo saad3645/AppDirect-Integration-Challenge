@@ -64,7 +64,7 @@ public class Subscriptions extends Controller {
                                 String edition = order.getEditionCode();
 
 
-                                if (User.find().byId(creator.uuid) != null) {
+                                if (User.find().byId(creator.uuid) != null || Company.find().byId(company.uuid) != null) {
                                     String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                                             "<result>\n" +
                                             "    <success>false</success>\n" +
@@ -73,10 +73,6 @@ public class Subscriptions extends Controller {
                                             "</result>";
 
                                     return ok(errorResponse).as("text/xml");
-                                }
-
-                                if (Company.find().byId(company.uuid) == null) {
-                                    company.save();
                                 }
 
                                 String accountId = Subscription.create(creator, company, edition);

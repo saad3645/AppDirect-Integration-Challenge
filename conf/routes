@@ -20,7 +20,8 @@ GET     /api/subscriptions/all              controllers.Subscriptions.all()
 
 
 # Be very careful with these!!
-GET     /api/users/delete/all               controllers.Users.deleteAll()
+GET     /api/users/delete/all               controllers.Users.deleteAllUsers()
+GET     /api/companies/delete/all           controllers.Users.deleteAllCompanies()
 GET     /api/subscriptions/delete/all       controllers.Subscriptions.deleteAll()
 
 

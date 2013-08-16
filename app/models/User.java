@@ -26,16 +26,16 @@ public class User extends Model {
     @Id
     public String uuid;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String email;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String firstName;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String lastName;
 
-    @NotNull @NotEmpty
+    @NotNull
     public String openId;
 
 

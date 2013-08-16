@@ -21,10 +21,10 @@ public class Subscription extends Model {
     public String id;
 
     @NotNull
-    @ManyToOne (cascade = CascadeType.ALL)
+    @OneToOne (cascade = CascadeType.ALL)
     public User creator;
 
-    @ManyToOne (cascade = CascadeType.ALL)
+    @OneToOne (cascade = CascadeType.ALL)
     public Company company;
 
     @ManyToMany (cascade = CascadeType.ALL)
