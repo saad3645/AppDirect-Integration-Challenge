@@ -32,4 +32,14 @@ public class Users extends Controller {
         List<User> users = User.find().all();
         return ok(Json.toJson(users));
     }
+
+
+    public static Result deleteAll() {
+        List<User> users = User.find().all();
+        for (User u : users) {
+            u.delete();
+        }
+
+        return ok("All users deleted");
+    }
 }

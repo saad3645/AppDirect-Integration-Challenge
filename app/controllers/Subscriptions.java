@@ -310,4 +310,14 @@ public class Subscriptions extends Controller {
         List<Subscription> subscriptions = Subscription.find().all();
         return ok(Json.toJson(subscriptions));
     }
+
+
+    public static Result deleteAll() {
+        List<Subscription> subscriptions = Subscription.find().all();
+        for (Subscription s: subscriptions) {
+            s.delete();
+        }
+
+        return ok("All subscriptions deleted");
+    }
 }

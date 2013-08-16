@@ -19,6 +19,10 @@ GET     /api/users/all                      controllers.Users.all()
 GET     /api/subscriptions/all              controllers.Subscriptions.all()
 
 
+# Be very careful with these!!
+GET     /api/users/delete/all               controllers.Users.deleteAll()
+GET     /api/subscriptions/delete/all       controllers.Subscriptions.deleteAll()
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
