@@ -13,7 +13,6 @@ public class Order {
 
     private String editionCode;
     private String pricingDuration;
-    private Item[] item;
 
 
     public String getEditionCode() {
@@ -30,13 +29,5 @@ public class Order {
 
     public void setPricingDuration(String pricingDuration) {
         this.pricingDuration = pricingDuration;
-    }
-
-    public Item[] getItem() {
-        return item;
-    }
-
-    public void setItem(Item[] item) {
-        this.item = item;
     }
 }

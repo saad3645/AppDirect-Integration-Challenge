@@ -64,7 +64,6 @@ public class Subscriptions extends Controller {
                                 Company company = event.getPayload().getCompany();
                                 Order order = event.getPayload().getOrder();
                                 String edition = order.getEditionCode();
-                                Item[] items = order.getItem();
 
 
                                 if (User.find().byId(creator.uuid) != null) {
@@ -83,10 +82,6 @@ public class Subscriptions extends Controller {
                                 }
 
                                 String accountId = Subscription.create(creator, company, edition);
-
-                                for (int i = 0; i < items.length; i++) {
-                                    Subscription.addItem(accountId, new SubscriptionItem(items[i].getUnit(), items[i].getQuantity()));
-                                }
 
                                 String responseStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                                         "<result>\n" +
@@ -167,11 +162,6 @@ public class Subscriptions extends Controller {
 
                                 if (!edition.equals(subscription.edition)) {
                                     Subscription.changeEdition(subscription.id, edition);
-                                }
-
-                                Item[] items = order.getItem();
-                                for (int i = 0; i < items.length; i++) {
-                                    Subscription.addItem(subscription.id, new SubscriptionItem(items[i].getUnit(), items[i].getQuantity()));
                                 }
 
                                 String successResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
