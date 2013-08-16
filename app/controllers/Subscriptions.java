@@ -150,16 +150,6 @@ public class Subscriptions extends Controller {
                                     return ok(errorResponse).as("text/xml");
                                 }
 
-                                if (User.find().byId(creator.uuid) == null) {
-                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                                            "<result>\n" +
-                                            "    <success>false</success>\n" +
-                                            "    <errorCode>USER_NOT_FOUND</errorCode>\n" +
-                                            "    <message>User " + creator.firstName + " " + creator.lastName + " could not be found.</message>\n" +
-                                            "</result>";
-
-                                    return ok(errorResponse).as("text/xml");
-                                }
 
                                 Order order = payload.getOrder();
                                 String edition = order.getEditionCode();

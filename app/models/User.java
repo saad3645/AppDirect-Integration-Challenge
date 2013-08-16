@@ -39,6 +39,17 @@ public class User extends Model {
     }
 
 
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof User) {
+            return this.uuid.equals(((User) object).uuid);
+        }
+
+        return false;
+    }
+
+
+
     public static Finder<String, User> find() {
         return new Finder<String, User>(String.class, User.class);
     }

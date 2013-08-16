@@ -20,25 +20,25 @@ public class Subscription extends Model {
     public String id;
 
     @OneToOne (cascade = CascadeType.ALL)
-    public User creator;
-
-    @OneToOne (cascade = CascadeType.ALL)
     public Company company;
 
     public String edition;
 
+    public String status;
+
     @OneToMany (cascade = CascadeType.ALL)
     public List<SubscriptionItem> items;
 
-    public String status;
+    @OneToMany (cascade = CascadeType.ALL)
+    public List<User> users;
 
 
     public Subscription(User creator, Company company, String edition) {
         this.id = UUID.randomUUID().toString();
-        this.creator = creator;
         this.company = company;
         this.edition = edition;
         this.status = Status.FREE_TRIAL.toString().toUpperCase();
+        this.users.add(creator);
     }
 
 
@@ -53,9 +53,12 @@ public class Subscription extends Model {
     }
 
     public static void addItem(String id, SubscriptionItem item) {
-        Subscription subscription = Subscription.find().ref(id);
-        subscription.items.add(item);
-        subscription.update();
+        Subscription subscription = Subscription.find().byId(id);
+
+        if (subscription != null) {
+            subscription.items.add(item);
+            subscription.update();
+        }
     }
 
     public static void changeEdition(String id, String edition) {
@@ -68,6 +71,24 @@ public class Subscription extends Model {
         Subscription subscription = Subscription.find().ref(id);
         subscription.status = status.toUpperCase();
         subscription.update();
+    }
+
+    public static void addUser(String id, User user) {
+        Subscription subscription = Subscription.find().byId(id);
+
+        if (subscription != null) {
+            subscription.users.add(user);
+            subscription.update();
+        }
+    }
+
+    public static void removeUser(String id, User user) {
+        Subscription subscription = Subscription.find().byId(id);
+
+        if (subscription != null) {
+            subscription.users.remove(user);
+            subscription.update();
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package models.xml;
 
 import models.Company;
+import models.User;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,6 +16,7 @@ public class Payload {
     private Company company;
     private Order order;
     private Notice notice;
+    private User user;
 
 
     public Account getAccount() {
@@ -47,5 +49,13 @@ public class Payload {
 
     public void setNotice(Notice notice) {
         this.notice = notice;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

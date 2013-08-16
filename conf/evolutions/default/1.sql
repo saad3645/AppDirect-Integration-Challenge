@@ -15,7 +15,6 @@ create table companies (
 
 create table subscriptions (
   id                        varchar(255) not null,
-  creator_uuid              varchar(255),
   company_uuid              varchar(255),
   edition                   varchar(255),
   status                    varchar(255),
@@ -32,6 +31,7 @@ create table subscription_items (
 
 create table users (
   uuid                      varchar(255) not null,
+  subscription_id           varchar(255) not null,
   email                     varchar(255),
   first_name                varchar(255),
   last_name                 varchar(255),
@@ -57,12 +57,12 @@ create sequence users_seq;
 
 create sequence user_attributes_seq;
 
-alter table subscriptions add constraint fk_subscriptions_creator_1 foreign key (creator_uuid) references users (uuid) on delete restrict on update restrict;
-create index ix_subscriptions_creator_1 on subscriptions (creator_uuid);
-alter table subscriptions add constraint fk_subscriptions_company_2 foreign key (company_uuid) references companies (uuid) on delete restrict on update restrict;
-create index ix_subscriptions_company_2 on subscriptions (company_uuid);
-alter table subscription_items add constraint fk_subscription_items_subscrip_3 foreign key (subscription_id) references subscriptions (id) on delete restrict on update restrict;
-create index ix_subscription_items_subscrip_3 on subscription_items (subscription_id);
+alter table subscriptions add constraint fk_subscriptions_company_1 foreign key (company_uuid) references companies (uuid) on delete restrict on update restrict;
+create index ix_subscriptions_company_1 on subscriptions (company_uuid);
+alter table subscription_items add constraint fk_subscription_items_subscrip_2 foreign key (subscription_id) references subscriptions (id) on delete restrict on update restrict;
+create index ix_subscription_items_subscrip_2 on subscription_items (subscription_id);
+alter table users add constraint fk_users_subscriptions_3 foreign key (subscription_id) references subscriptions (id) on delete restrict on update restrict;
+create index ix_users_subscriptions_3 on users (subscription_id);
 alter table user_attributes add constraint fk_user_attributes_user_4 foreign key (user_uuid) references users (uuid) on delete restrict on update restrict;
 create index ix_user_attributes_user_4 on user_attributes (user_uuid);
 

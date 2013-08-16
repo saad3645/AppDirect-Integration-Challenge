@@ -2,13 +2,23 @@ package controllers;
 
 
 import models.Company;
+import models.Subscription;
 import models.User;
+import models.xml.Account;
+import models.xml.Event;
+import play.libs.F;
 import play.libs.Json;
+import play.libs.WS;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+import java.net.URLDecoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -17,14 +27,152 @@ import java.util.List;
 public class Users extends Controller {
 
 
-    // TODO
+    @BodyParser.Of(BodyParser.Xml.class)
     public static Result assign() {
-        return TODO;
+
+        Map<String, String[]> queryParams = request().queryString();
+
+        if (!queryParams.containsKey("url")) {
+            return badRequest();
+        }
+
+        String encodedUrl = queryParams.get("url")[0];
+        String url = "";
+        String authorization = "";
+
+        try {
+            url = URLDecoder.decode(encodedUrl, "UTF-8");
+            authorization = Security.signAuthorization(url);
+        }
+
+        catch (Exception e) {
+            return unauthorized();
+        }
+
+        return async(
+                WS.url(url).setHeader("Authorization", authorization).get().map(
+                        new F.Function<WS.Response, Result>() {
+                            @Override
+                            public Result apply(WS.Response response) throws Throwable {
+
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
+                                JAXBContext context = JAXBContext.newInstance(Event.class);
+                                Unmarshaller unmarshaller = context.createUnmarshaller();
+
+                                Event event = (Event) unmarshaller.unmarshal(reader);
+                                Account account = event.getPayload().getAccount();
+                                User user = event.getPayload().getUser();
+
+
+                                Subscription subscription = Subscription.find().byId(account.getAccountIdentifier());
+
+                                if (subscription == null) {
+                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                            "<result>\n" +
+                                            "    <success>false</success>\n" +
+                                            "    <errorCode>ACCOUNT_NOT_FOUND</errorCode>\n" +
+                                            "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
+                                            "</result>";
+
+                                    return ok(errorResponse).as("text/xml");
+                                }
+
+                                Subscription.addUser(subscription.id, user);
+
+                                String successResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                        "<result>\n" +
+                                        "    <success>true</success>\n" +
+                                        "    <message>User assigned successfully</message>" +
+                                        "</result>";
+
+                                return ok(successResponse).as("text/xml");
+                            }
+                        }
+                )
+        );
     }
 
-    // TODO
+
+    @BodyParser.Of(BodyParser.Xml.class)
     public static Result unassign() {
-        return TODO;
+        Map<String, String[]> queryParams = request().queryString();
+
+        if (!queryParams.containsKey("url")) {
+            return badRequest();
+        }
+
+        String encodedUrl = queryParams.get("url")[0];
+        String url = "";
+        String authorization = "";
+
+        try {
+            url = URLDecoder.decode(encodedUrl, "UTF-8");
+            authorization = Security.signAuthorization(url);
+        }
+
+        catch (Exception e) {
+            return unauthorized();
+        }
+
+        return async(
+                WS.url(url).setHeader("Authorization", authorization).get().map(
+                        new F.Function<WS.Response, Result>() {
+                            @Override
+                            public Result apply(WS.Response response) throws Throwable {
+
+                                String s = response.getBody();
+                                StringReader reader = new StringReader(s);
+
+                                JAXBContext context = JAXBContext.newInstance(Event.class);
+                                Unmarshaller unmarshaller = context.createUnmarshaller();
+
+                                Event event = (Event) unmarshaller.unmarshal(reader);
+                                Account account = event.getPayload().getAccount();
+                                User user = event.getPayload().getUser();
+
+
+                                Subscription subscription = Subscription.find().byId(account.getAccountIdentifier());
+
+                                if (subscription == null) {
+                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                            "<result>\n" +
+                                            "    <success>false</success>\n" +
+                                            "    <errorCode>ACCOUNT_NOT_FOUND</errorCode>\n" +
+                                            "    <message>The account " + account.getAccountIdentifier() + " could not be found.</message>\n" +
+                                            "</result>";
+
+                                    return ok(errorResponse).as("text/xml");
+                                }
+
+
+                                List<User> users = subscription.users;
+
+                                if (!users.contains(user)) {
+                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                            "<result>\n" +
+                                            "    <success>false</success>\n" +
+                                            "    <errorCode>USER_NOT_FOUND</errorCode>\n" +
+                                            "    <message>User " + user.firstName + " " + user.lastName + " has not been assigned</message>\n" +
+                                            "</result>";
+
+                                    return ok(errorResponse).as("text/xml");
+                                }
+
+                                Subscription.removeUser(subscription.id, user);
+
+                                String successResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                        "<result>\n" +
+                                        "    <success>true</success>\n" +
+                                        "    <message>User unassigned successfully</message>" +
+                                        "</result>";
+
+                                return ok(successResponse).as("text/xml");
+                            }
+                        }
+                )
+        );
     }
 
 
