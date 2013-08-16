@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                               controllers.Application.index()
+
+
+# Event Notification Urls
+GET     /appdirect/subscription/order     controllers.Subscriptions.order()
+GET     /appdirect/subscription/change    controllers.Subscriptions.change()
+GET     /appdirect/subscription/cancel    controllers.Subscriptions.cancel()
+GET     /appdirect/subscription/notice    controllers.Subscriptions.notice()
+GET     /appdirect/user/assign/:eventUrl            controllers.Users.assign(eventUrl: String)
+GET     /appdirect/user/unassign/:eventUrl          controllers.Users.unassign(eventUrl: String)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
