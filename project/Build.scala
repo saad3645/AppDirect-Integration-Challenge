@@ -12,7 +12,6 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-	"org.json" % "org.json" % "chargebee-1.0",
 	"postgresql" % "postgresql" % "9.1-901-1.jdbc4"
   )
 
