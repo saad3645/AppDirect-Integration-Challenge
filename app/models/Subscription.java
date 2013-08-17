@@ -88,6 +88,7 @@ public class Subscription extends Model {
         if (subscription != null) {
             subscription.users.remove(user);
             subscription.update();
+            user.delete();
         }
     }
 
