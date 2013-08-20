@@ -68,7 +68,8 @@ public class Application extends Controller {
             DiscoveryInformation discovered = manager.associate(discoveries);
 
             // store the discovery information in the cache for later use
-            Cache.set(openId, discovered, 60 * 15);
+            Cache.set(openId + "manager", manager, 60 * 15);
+            Cache.set(openId + "discovered", discovered, 60 * 15);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             AuthRequest authRequest = manager.authenticate(discovered, returnUrl);
@@ -92,16 +93,15 @@ public class Application extends Controller {
         String claimedId = queryParams.get("openid.claimed_id")[0];
 
         // retrieve the previously stored discovery information
-        DiscoveryInformation discovered = (DiscoveryInformation)Cache.get(claimedId);
+        ConsumerManager manager = (ConsumerManager)Cache.get(claimedId + "manager");
+        DiscoveryInformation discovered = (DiscoveryInformation)Cache.get(claimedId + "discovered");
 
-        String receivingUri = request().uri();
+        String receivingUrl = request().host() + request().uri();
         ParameterList parameterList = new ParameterList(queryParams);
-
-        ConsumerManager manager = new ConsumerManager();
 
         // verify the response
         try {
-            VerificationResult verification = manager.verify(receivingUri, parameterList, discovered);
+            VerificationResult verification = manager.verify(receivingUrl, parameterList, discovered);
             Identifier verified = verification.getVerifiedId();
 
             if (verified != null) {
@@ -109,7 +109,7 @@ public class Application extends Controller {
             }
 
             else {
-                return unauthorized(receivingUri);
+                return unauthorized(claimedId + " " + receivingUrl);
             }
         }
 
