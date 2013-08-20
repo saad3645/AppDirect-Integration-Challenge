@@ -6,6 +6,9 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.discovery.DiscoveryException;
+import org.openid4java.discovery.DiscoveryInformation;
+import org.openid4java.message.AuthRequest;
+import org.openid4java.message.MessageException;
 import play.*;
 import play.mvc.*;
 
@@ -48,17 +51,41 @@ public class Application extends Controller {
         }
 
 
-        //try {
-        //    ConsumerManager consumerManager = new ConsumerManager();
-        //    List discoveries = consumerManager.discover(openId);
-        //}
+        try {
+            ConsumerManager manager = new ConsumerManager();
+            String returnUrl = "http://mighty-spire.herokuapp.com/openId";
 
-        //catch (DiscoveryException e) {
-        //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        //}
+            // perform discovery on the user-supplied identifier
+            List discoveries = manager.discover(openId);
+
+            // attempt to associate with the OpenID provider
+            // and retrieve one service endpoint for authentication
+            DiscoveryInformation discovered = manager.associate(discoveries);
+
+            // obtain a AuthRequest message to be sent to the OpenID provider
+            AuthRequest authRequest = manager.authenticate(discovered, returnUrl);
+
+            return redirect(authRequest.getDestinationUrl(true));
+        }
+
+        catch (DiscoveryException e) {
+            e.printStackTrace();
+            return ok(e.getMessage());
+        } catch (MessageException e) {
+            e.printStackTrace();
+            return ok(e.getMessage());
+        } catch (ConsumerException e) {
+            e.printStackTrace();
+            return ok(e.getMessage());
+        }
 
 
-        return ok("OpenId: " + openId + " accountId: " + accountId);
+        //return ok("OpenId: " + openId + " accountId: " + accountId);
+    }
+
+
+    public static Result openId() {
+        return ok();
     }
   
 }

@@ -16,6 +16,7 @@ GET     /appdirect/user/unassign            controllers.Users.unassign()
 
 # OpenId Login
 GET     /appdirect/login                    controllers.Application.authenticate()
+GET     /openid                             controllers.Application.openId()
 
 
 GET     /api/users/all                      controllers.Users.all()
