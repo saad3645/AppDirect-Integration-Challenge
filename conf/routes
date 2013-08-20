@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                                   controllers.Application.index()
+GET     /home                               controllers.Application.home()
 
 
 # Event Notification Urls

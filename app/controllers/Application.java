@@ -1,5 +1,6 @@
 package controllers;
 
+import models.User;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -23,11 +24,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Application extends Controller {
   
     public static Result index() {
-        return ok(index.render("Welcome to Mighty Spire"));
+        return ok(index.render());
     }
 
 
@@ -92,7 +94,7 @@ public class Application extends Controller {
 
         String claimedId = queryParams.get("openid.claimed_id")[0];
 
-        // retrieve the previously stored discovery information
+        // retrieve the previously stored consumer manager and discovery information
         ConsumerManager manager = (ConsumerManager)Cache.get(claimedId + "manager");
         DiscoveryInformation discovered = (DiscoveryInformation)Cache.get(claimedId + "discovered");
 
@@ -105,11 +107,24 @@ public class Application extends Controller {
             Identifier verified = verification.getVerifiedId();
 
             if (verified != null) {
-                return ok("Login Successful");
+                String userOpenId = queryParams.get("openid.identity")[0];
+                User user = User.find().where().eq("openId", userOpenId).findUnique();
+
+                if (user != null) {
+                    String userId = user.uuid;
+                    session().clear();
+                    session("userId", userId);
+
+                    return redirect("/home");
+                }
+
+                else {
+                    return unauthorized("User does not exist");
+                }
             }
 
             else {
-                return unauthorized(claimedId + " " + parameterList.toString() + " " + receivingUrl);
+                return unauthorized("Unauthorized");
             }
         }
 
@@ -118,6 +133,13 @@ public class Application extends Controller {
             return unauthorized("Unauthorized");
         }
 
+    }
+
+
+    public static Result home() {
+        String userId = session("userId");
+        User user = User.find().byId(userId);
+        return ok(home.render(user.firstName, user.lastName, user.openId));
     }
   
 }

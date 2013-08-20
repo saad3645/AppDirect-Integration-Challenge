@@ -1,3 +1,5 @@
+@(firstName: String)(lastName: String)(openId: String)
+
 <!DOCTYPE html>
 
 <html>
@@ -7,6 +9,9 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     </head>
     <body>
-        <div><h2>Welcome to Mighty Spire</h2></div>
+        <div>
+            <h2>Hello @firstName @lastName</h2>
+            <span>Your openId is: @openId</span>
+        </div>
     </body>
 </html>
