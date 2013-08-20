@@ -5,6 +5,7 @@
 # Home page
 GET     /                                   controllers.Application.index()
 GET     /home                               controllers.Application.home()
+GET     /logout                             controllers.Application.logout()
 
 
 # Event Notification Urls

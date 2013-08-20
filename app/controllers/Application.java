@@ -138,8 +138,27 @@ public class Application extends Controller {
 
     public static Result home() {
         String userId = session("userId");
-        User user = User.find().byId(userId);
-        return ok(home.render(user.firstName, user.lastName, user.openId));
+
+        if (userId != null) {
+            User user = User.find().byId(userId);
+
+            if (user != null) {
+                return ok(home.render(user.firstName, user.lastName, user.openId));
+            }
+
+            else {
+                return unauthorized("Unauthorized");
+            }
+        }
+
+        else {
+            return unauthorized("Unauthorized");
+        }
+    }
+
+    public static Result logout() {
+        session().clear();
+        return redirect("/");
     }
   
 }
