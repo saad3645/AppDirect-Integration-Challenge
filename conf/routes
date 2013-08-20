@@ -14,12 +14,15 @@ GET     /appdirect/subscription/notice      controllers.Subscriptions.notice()
 GET     /appdirect/user/assign              controllers.Users.assign()
 GET     /appdirect/user/unassign            controllers.Users.unassign()
 
+# OpenId Login
+GET     /appdirect/login                    controllers.Application.authenticate()
+
 
 GET     /api/users/all                      controllers.Users.all()
 GET     /api/subscriptions/all              controllers.Subscriptions.all()
 
 
-# Be very careful with these!!
+# Be very careful with these!! They are destructive!!
 GET     /api/users/delete/all               controllers.Users.deleteAllUsers()
 GET     /api/companies/delete/all           controllers.Users.deleteAllCompanies()
 GET     /api/subscriptions/delete/all       controllers.Subscriptions.deleteAll()

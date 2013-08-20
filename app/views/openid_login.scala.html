@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html ng-app="">
+    <head>
+        <title>Mighty Spire</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    </head>
+    <body ng-controller="OpenIdLoginController">
+        <div class="wrap">
+            <div class="signin-panel">
+                <div class="signin-error-flash">
+                    <span>Sign In Failed. Wrong Credentials.</span>
+                </div>
+                <form ng-submit="signIn()">
+                    <h3 class="signin-title">Welcome to Blueberry</h3>
+                    <fieldset class="signin-fieldset">
+                        <input type="text" class="blueberry-textbox signin-textbox" name="userhandle" ng-model="credentials.userhandle" placeholder="Username or email" ng-required />
+                        <input type="password" class="blueberry-textbox signin-textbox" name="password" ng-model="credentials.password" placeholder="Password" ng-required />
+                        <input type="hidden" name="authenticity-token" ng-model="credentials.authenticity_token"/>
+                        <button type="submit" class="blueberry-button signin-button" value="Sign In">Sign In</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
