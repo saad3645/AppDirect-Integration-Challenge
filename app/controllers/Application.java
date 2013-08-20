@@ -96,7 +96,7 @@ public class Application extends Controller {
         ConsumerManager manager = (ConsumerManager)Cache.get(claimedId + "manager");
         DiscoveryInformation discovered = (DiscoveryInformation)Cache.get(claimedId + "discovered");
 
-        String receivingUrl = request().host() + request().uri();
+        String receivingUrl = "http://" + request().host() + request().uri();
         ParameterList parameterList = new ParameterList(queryParams);
 
         // verify the response
@@ -109,7 +109,7 @@ public class Application extends Controller {
             }
 
             else {
-                return unauthorized(claimedId + " " + receivingUrl);
+                return unauthorized(claimedId + " " + parameterList.toString() + " " + receivingUrl);
             }
         }
 
