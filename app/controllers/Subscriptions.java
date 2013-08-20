@@ -5,9 +5,6 @@ import models.Subscription;
 import models.SubscriptionItem;
 import models.User;
 import models.xml.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import play.libs.F.Function;
 import play.libs.Json;
 import play.libs.WS;
@@ -70,19 +67,41 @@ public class Subscriptions extends Controller {
                                 Order order = event.getPayload().getOrder();
                                 String edition = order.getEditionCode();
 
+                                String accountId = "";
 
-                                if (User.find().byId(creator.uuid) != null || Company.find().byId(company.uuid) != null) {
-                                    String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                                            "<result>\n" +
-                                            "    <success>false</success>\n" +
-                                            "    <errorCode>USER_ALREADY_EXISTS</errorCode>\n" +
-                                            "    <message>The user " + creator.firstName + " " + creator.lastName + " is already registered</message>\n" +
-                                            "</result>";
+                                if (Company.find().byId(company.uuid) == null) {
 
-                                    return ok(errorResponse).as("text/xml");
+                                    if (User.find().byId(creator.uuid) != null) {
+                                        String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                                "<result>\n" +
+                                                "    <success>false</success>\n" +
+                                                "    <errorCode>USER_ALREADY_EXISTS</errorCode>\n" +
+                                                "    <message>The user is already registered</message>\n" +
+                                                "</result>";
+
+                                        return ok(errorResponse).as("text/xml");
+                                    }
+
+                                    accountId = Subscription.create(creator, company, edition);
                                 }
 
-                                String accountId = Subscription.create(creator, company, edition);
+                                else {
+                                    Subscription subscription = Subscription.find().where().eq("company_uuid", company.uuid).findUnique();
+
+                                    if (subscription.status.equals(Subscription.Status.ACTIVE.toString()) || subscription.status.equals(Subscription.Status.FREE_TRIAL.toString())) {
+                                        String errorResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                                "<result>\n" +
+                                                "    <success>false</success>\n" +
+                                                "    <errorCode>USER_ALREADY_EXISTS</errorCode>\n" +
+                                                "    <message>The company is already registered</message>\n" +
+                                                "</result>";
+
+                                        return ok(errorResponse).as("text/xml");
+                                    }
+
+                                    Subscription.changeStatus(subscription.id, Subscription.Status.FREE_TRIAL.toString());
+                                    accountId = subscription.id;
+                                }
 
                                 String responseStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                                         "<result>\n" +
