@@ -67,8 +67,6 @@ public class Subscriptions extends Controller {
                                 Order order = event.getPayload().getOrder();
                                 String edition = order.getEditionCode();
 
-                                String accountId = "";
-
                                 if (Company.find().byId(company.uuid) == null) {
 
                                     if (User.find().byId(creator.uuid) != null) {
@@ -81,8 +79,6 @@ public class Subscriptions extends Controller {
 
                                         return ok(errorResponse).as("text/xml");
                                     }
-
-                                    accountId = Subscription.create(creator, company, edition);
                                 }
 
                                 else {
@@ -99,9 +95,10 @@ public class Subscriptions extends Controller {
                                         return ok(errorResponse).as("text/xml");
                                     }
 
-                                    Subscription.changeStatus(subscription.id, Subscription.Status.FREE_TRIAL.toString());
-                                    accountId = subscription.id;
+                                    subscription.delete();
                                 }
+
+                                String accountId = Subscription.create(creator, company, edition);
 
                                 String responseStr = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
                                         "<result>\n" +
